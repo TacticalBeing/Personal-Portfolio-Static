@@ -86,6 +86,85 @@ Clients
 alt = client logo
 
 
+*******************************************************************************************************************************************************************
+1. 2 tier
+
+user data : ec2 instance
+	
+#!/bin/bash
+yum update -y
+amazon-linux-extras install -y php8.0 mariadb10.5
+yum install -y httpd git
+systemctl start httpd
+systemctl enable httpd
+usermod -a -G apache ec2-user
+chown -R ec2-user:apache /var/www
+chmod 2775 /var/www
+find /var/www -type d -exec chmod 2775 {} \;
+find /var/www -type f -exec chmod 0664 {} \;
+echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+
+
+
+RDS:
+
+*Connect to the SQL server and create the database and table:
+mysql -u admin -p'password' -h database-
+1.ceaqyubwm5tx.ap-south-1.rds.amazonaws.com
+
+
+*Create the database:
+create database employees_db;
+
+
+*Check the database:
+show databases;
+
+
+*Change to the database:
+use employees_db;
+
+
+*Create table:
+CREATE TABLE employees (
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(100) NOT NULL,
+address VARCHAR(255) NOT NULL,
+salary INT(10) NOT NULL
+);
+
+
+*Check the tables:
+show tables;
+
+> exit
+
+
+*Fork the Githup repo to your Github account and update the dB detail:
+a. Navigate to github.com/gnataraj/php-mysql
+b. Click on Fork
+c. Click on Create fork
+d. This will create the fork of this project in your account (Next steps have to be
+performed in your account)
+e. Open the “config.php” file
+f. Edit the file by clicking on Edit icon
+g. Update the value ‘DB_SERVER’ of with your db_server
+h. Commit the changes in to github in your project.
+
+
+*Updating the EC2 instance with the PHP project (Below steps have to be performed
+in EC2 instance.
+a. Remove the phpinfo.php
+
+rm /var/www/html/phpinfo.php
+
+b. Clone your git project to /var/www/html folder (replace gnataraj-mf with your
+github account(step number 12)
+
+git clone https://github.com/gnataraj-mf/phpmysql.git /var/www/html/
+
+
+********************************************************************************************************************************************************************
 
 # resume
 
@@ -96,6 +175,8 @@ Education
 University school of the arts
 2007 — 2008
 Nemo enims ipsam voluptatem, blanditiis praesentium voluptum delenit atque corrupti, quos dolores et quas molestias exceptur.
+
+
 
 New york academy of art
 2006 — 2007
